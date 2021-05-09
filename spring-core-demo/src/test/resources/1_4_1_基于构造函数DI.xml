@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--  构造函数参数类型匹配  -->
+    <bean id="DIConstructorTypeBean" class="io.github.wesleyone.spring.core.c1.c4.DIConstructorTypeBean">
+        <constructor-arg type="int" value="7500000"/>
+        <constructor-arg type="java.lang.String" value="42"/>
+    </bean>
+
+    <!--  构造函数参数索引  -->
+    <bean id="DIConstructorIndexBean" class="io.github.wesleyone.spring.core.c1.c4.DIConstructorIndexBean">
+        <constructor-arg index="0" value="7500000"/>
+        <constructor-arg index="1" value="43"/>
+    </bean>
+
+    <!--  构造函数参数名称  -->
+    <bean id="DIConstructorNameBean" class="io.github.wesleyone.spring.core.c1.c4.DIConstructorNameBean">
+        <constructor-arg name="years" value="7500000"/>
+        <constructor-arg name="ultimateAnswer" value="44"/>
+    </bean>
+
+
+    <!--  静态工厂方法实例化 (通过本类的静态方法) 构造函数参数类型匹配-->
+    <bean id="DIStaticMethodConstructorTypeBean"
+          class="io.github.wesleyone.spring.core.c1.c4.DIStaticMethodConstructorTypeBean"
+          factory-method="createInstance">
+        <constructor-arg type="int" value="7500000"/>
+        <constructor-arg type="java.lang.String" value="45"/>
+    </bean>
+
+    <!--  静态工厂方法实例化 (通过本类的静态方法) 构造函数参数索引-->
+    <bean id="DIStaticMethodConstructorIndexBean"
+          class="io.github.wesleyone.spring.core.c1.c4.DIStaticMethodConstructorIndexBean"
+          factory-method="createInstance">
+        <constructor-arg index="0" value="7500000"/>
+        <constructor-arg index="1" value="46"/>
+    </bean>
+
+    <!--  静态工厂方法实例化 (通过本类的静态方法) 构造函数参数名称-->
+    <bean id="DIStaticMethodConstructorNameBean"
+          class="io.github.wesleyone.spring.core.c1.c4.DIStaticMethodConstructorNameBean"
+          factory-method="createInstance">
+        <constructor-arg name="years" value="7500000"/>
+        <constructor-arg name="ultimateAnswer" value="47"/>
+    </bean>
+
+</beans>

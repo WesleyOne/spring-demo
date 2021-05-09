@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  基于Setter的依赖注入  -->
+    <bean id="DISetterBean" class="io.github.wesleyone.spring.core.c1.c4.DISetterBean">
+        <property name="years" value="7500000"/>
+        <property name="ultimateAnswer" value="42"/>
+    </bean>
+
+    <!--  基于构造函数参数混合Setter的依赖注入  -->
+    <bean id="DIConstructorIndexAndSetterBean" class="io.github.wesleyone.spring.core.c1.c4.DIConstructorIndexAndSetterBean">
+        <constructor-arg index="0" value="7500000"/>
+        <property name="ultimateAnswer" value="42"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="parentBean" class="io.github.wesleyone.spring.core.c1.c7.ParentBean">
+        <property name="name" value="parent"/>
+        <property name="age" value="1"/>
+    </bean>
+
+    <bean id="childBean" class="io.github.wesleyone.spring.core.c1.c7.ChildBean"
+        parent="parentBean">
+        <property name="name" value="child"/>
+    </bean>
+
+    <!--  抽象模版类，不能单独实例化，不指定class  -->
+    <bean id="parentAbstractBean" abstract="true">
+        <property name="name" value="parent"/>
+        <property name="age" value="1"/>
+    </bean>
+
+    <bean id="childAbstractBean" class="io.github.wesleyone.spring.core.c1.c7.ChildAbstractBean"
+          parent="parentAbstractBean">
+        <property name="name" value="childAbstract"/>
+    </bean>
+</beans>

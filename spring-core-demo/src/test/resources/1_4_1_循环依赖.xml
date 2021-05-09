@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean name="circularDoubleSingleA" class="io.github.wesleyone.spring.core.c1.c4.CircularDISetterABean">
+        <property name="b" ref="circularDoubleSingleB"/>
+    </bean>
+
+    <bean name="circularDoubleSingleB" class="io.github.wesleyone.spring.core.c1.c4.CircularDISetterBBean">
+        <property name="a" ref="circularDoubleSingleA"/>
+    </bean>
+
+    <bean name="singleOfCircularSingleAndPrototypeBean" class="io.github.wesleyone.spring.core.c1.c4.CircularDISetterABean">
+        <property name="b" ref="prototypeOfCircularSingleAndPrototypeBean"/>
+    </bean>
+
+    <bean name="prototypeOfCircularSingleAndPrototypeBean" class="io.github.wesleyone.spring.core.c1.c4.CircularDISetterBBean" scope="prototype">
+        <property name="a" ref="singleOfCircularSingleAndPrototypeBean"/>
+    </bean>
+</beans>

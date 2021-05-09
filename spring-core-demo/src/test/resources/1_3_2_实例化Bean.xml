@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  默认构造器实例化  -->
+    <bean id="exampleBean" class="io.github.wesleyone.spring.core.c1.c3.ExampleBean"/>
+
+    <!--  静态工厂方法实例化 (通过本类的静态方法) -->
+    <bean id="clientService"
+          class="io.github.wesleyone.spring.core.c1.c3.ClientService"
+          factory-method="createInstance"/>
+
+    <!--  使用实例对象的工厂方法 （通过对象的静态方法） -->
+    <bean id="serviceLocator" class="io.github.wesleyone.spring.core.c1.c3.DefaultServiceLocator"/>
+    <bean id="clientService2"
+          factory-bean="serviceLocator"
+          factory-method="createClientServiceInstance"/>
+
+</beans>
