@@ -1,4 +1,4 @@
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/spring-demo" # the subpath of your site, e.g. /blog
 
 # Build settings
 markdown: kramdown
