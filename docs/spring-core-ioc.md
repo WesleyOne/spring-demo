@@ -4,7 +4,7 @@
 参考[Spring Core文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html)
 > 版本：5.3.5
 
-该文档主要介绍了**Spring框架的控制反转（IoC）容器**和**Spring的面向方面的编程（AOP）技术**。
+该文档主要介绍了**Spring框架的控制反转（IoC）容器**。
 
 ## 1. IOC容器
 
