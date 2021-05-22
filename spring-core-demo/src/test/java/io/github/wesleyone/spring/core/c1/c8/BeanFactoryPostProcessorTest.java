@@ -1,9 +1,9 @@
 package io.github.wesleyone.spring.core.c1.c8;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.testng.Assert;
 
 /**
  * @author http://wesleyone.github.io/

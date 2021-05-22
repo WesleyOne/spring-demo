@@ -54,7 +54,9 @@ Spring AOP也可以使用CGLIB代理。它是代理类的，而不是接口。�
 
 ### 5.4. @AspectJ支持
 
-@AspectJ是使用注解方式声明切面。@AspectJ注解是AspectJ项目在AspectJ 5发行版中引入的。Spring使用AspectJ提供的用于切入点解析和匹配的库来解释与AspectJ 5相同的注释。但是，AOP运行时仍然是纯Spring AOP，并且不依赖于AspectJ编译器或编织器。
+@AspectJ是使用注解方式声明切面。@AspectJ注解是AspectJ项目在AspectJ 5发行版中引入的。Spring使用AspectJ提供的用于切入点解析和匹配的相同注解。但是，AOP运行时仍然是纯Spring AOP，并且不依赖于AspectJ编译器或编织器。
+
+> spring-aop项目中将AspectJ的注解
 
 #### 5.4.1 启用@AspectJ支持
 
@@ -87,6 +89,8 @@ public class AppConfig {
 
 #### 5.4.2. 声明切面
 
+> 参考：io.github.wesleyone.spring.core.c5.c4.MyAspect
+
 启用@AspectJ支持后，Spring会自动检测在应用程序上下文中使用@AspectJ注解的bean，并用于配置Spring AOP。
 
 ```dtd
@@ -104,6 +108,8 @@ public class NotVeryUsefulAspect {
 
 #### 5.4.3. 声明切入点
 
+> 参考：io.github.wesleyone.spring.core.c5.c4.MyAspect
+
 切入点用于确认感兴趣的连接点。Spring AOP仅支持Spring Bean的方法执行连接点，因此您可以将切入点视为与Spring Bean上的方法执行相匹配的切入点。切入点声明有两个部分：一个切入点方法声明，以及一个切入点表达式，该切入点表达式精确地确定我们感兴趣的方法。
 
 ```dtd
@@ -120,15 +126,15 @@ public class NotVeryUsefulAspect {
 
 ##### SpringAOP支持的切入点指示符：
 
-- execution：用于匹配方法执行的连接点。
-- within：用于匹配指定类型内的方法执行。
+- execution：用于匹配【方法】。
+- within：用于匹配指定【类】内的所有方法。
 - this：用于匹配当前AOP代理对象类型的执行方法；注意是AOP代理对象的类型匹配，这样就可能包括引入接口也类型匹配；
 - target：用于匹配当前目标对象类型的执行方法；注意是目标对象的类型匹配，这样就不包括引入接口也类型匹配；
 - args：用于匹配当前执行的方法传入的参数为指定类型的执行方法；
 - @target：用于匹配当前目标对象类型的执行方法，其中目标对象持有指定的注解；
 - @args：用于匹配当前执行的方法传入的参数持有指定注解的执行；
-- @within：用于匹配所以持有指定注解类型内的方法；
-- @annotation：用于匹配当前执行方法持有指定注解的方法；
+- @within：用于匹配所以持有指定注解的【类】内的所有方法；
+- @annotation：用于匹配当前执行方法持有指定注解的【方法】；
 
 > AspectJ支持的其他切入点指示符，SpringAop不支持，会抛异常。
 
@@ -250,95 +256,9 @@ bean(*Service)
 
 #### 5.4.4. 声明通知
 
+> 参考：io.github.wesleyone.spring.core.c5.c4.MyAspect
+
 通知与切入点表达式关联，并且在切入点匹配的方法执行之前，之后或环绕运行。切入点表达式可以是对命名切入点的简单引用，也可以是直接的切入点表达式。
-
-- 
-
-```dtd
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-
-@Aspect
-public class Example {
-
-    // 命名切入点的引用
-    // 前置通知
-    @Before("com.xyz.myapp.CommonPointcuts.dataAccessOperation()")
-    public void doAccessCheck() {
-        // ...
-    }
-    
-    // 直接表达式
-    // 前置通知
-    @Before("execution(* com.xyz.myapp.dao.*.*(..))")
-    public void doAccessCheck() {
-        // ...
-    }
-
-    // 前置通知，并获取方法参数
-    @Before("com.xyz.myapp.CommonPointcuts.dataAccessOperation() && args(account,..)")
-    public void validateAccount(Account account) {
-        // ...
-    }
-
-    // 效果同上。切入点声明和通知分开
-    @Pointcut("com.xyz.myapp.CommonPointcuts.dataAccessOperation() && args(account,..)")
-    private void accountDataAccessOperation(Account account) {}
-    @Before("accountDataAccessOperation(account)")
-    public void validateAccount(Account account) {
-        // ...
-    }
-
-    // 正常返回后通知
-    @AfterReturning("com.xyz.myapp.CommonPointcuts.dataAccessOperation()")
-    public void doAccessCheck() {
-        // ...
-    }
-
-    // 正常返回后通知，并且获取返回值
-    @AfterReturning(
-        pointcut="com.xyz.myapp.CommonPointcuts.dataAccessOperation()",
-        returning="retVal")
-    public void doAccessCheck(Object retVal) {
-        // ...
-    }
-        
-    // 异常返回后通知
-    @AfterThrowing("com.xyz.myapp.CommonPointcuts.dataAccessOperation()")
-    public void doRecoveryActions() {
-        // ...
-    }
-
-    // 异常返回后通知，并且获取【目标方法】的异常（不会包括@After/@AfterReturning通知方法的异常）
-    @AfterThrowing(
-        pointcut="com.xyz.myapp.CommonPointcuts.dataAccessOperation()",
-        throwing="ex")
-    public void doRecoveryActions(DataAccessException ex) {
-        // ...
-    }
-
-    // after(finally)通知，在正常返回或者异常返回通知后，都会执行。通常用来释放资源。
-    @After("com.xyz.myapp.CommonPointcuts.dataAccessOperation()")
-    public void doReleaseLock() {
-        // ...
-    }
-
-    // 环绕通知。第一个参数必须是ProceedingJoinPoint类型，通过该参数可以获取相关参数
-    // getArgs()：返回方法参数
-    // getThis()：返回代理对象
-    // getTarget()：返回目标对象。
-    // getSignature()：返回建议使用的方法的描述。
-    // toString()：打印有关所建议方法的有用描述。
-    @Around("com.xyz.myapp.CommonPointcuts.businessService()")
-    public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable {
-        // start stopwatch
-        Object retVal = pjp.proceed();
-        // stop stopwatch
-        return retVal;
-     }
-}
-```
-
 
 切面通过`org.springframework.core.Ordered`接口和`@Order`注解，当处理相同切入点时，可以确定优先级。
 相同切面内的存在多个相同通知时，顺序不能控制，建议写到同个通知，或者分开多个切面。
@@ -463,7 +383,7 @@ MyInterfaceType proxy = factory.getProxy();
 
 #### 5.10. 在Spring应用程序中使用AspectJ
 
-略
+- LTW 加载时编织
 
 #### 5.11. 更多资源
 
@@ -473,9 +393,8 @@ MyInterfaceType proxy = factory.getProxy();
 
 ## 6. Spring AOP API
 
-上一章使用@AspectJ和基于模式的切面定义描述了Spring对AOP的支持。
-在本章中，我们讨论了较低级别的Spring AOP API。
-但是对于应用开发，建议将Spring AOP与AspectJ切入点一起使用，如上一章所述。
+上一章使用基于@AspectJ注解和基于XML的切面定义描述了Spring对AOP的支持，适合应用开发使用。
+在本章中，我们讨论底层的Spring AOP API。
 
 ### 6.1. Spring中的切入点 API
 
@@ -483,7 +402,7 @@ Spring如何处理切入点概念。
 
 #### 6.1.1.概念
 
-Spring的切入点模型使切入点重复使用不受通知类型的影响。您可以使用相同的切入点来定位不同的通知。
+Spring的切入点模型使切入点重复使用不受通知类型的影响。您可以使用相同的切入点来定位到不同的通知。
 
 `org.springframework.aop.Pointcut`接口是核心接口，用来将通知关联到指定的类和方法。
 ```java
@@ -554,7 +473,7 @@ class TestStaticPointcut extends StaticMethodMatcherPointcut {
 
 由于SpringAop是Java类实现的，而不是语言特征，用户可以声明自定义切入点，无论是静态的还是动态的。但是推荐直接使用AspectJ切入点表达式。
 
-### 6.1. Spring中的通知 API
+### 6.2. Spring中的通知 API
 
 #### 6.2.1. 通知的生命周期
 
@@ -564,7 +483,7 @@ per-class通知较常用。不依赖代理对象的状态或添加新状态，�
 
 per-instance通知可以使用引用（introductions），来支持mixins，可以将状态添加到代理对象中。
 
-在同一AOP代理中混合使用共享通知和基于实例通知。
+在同一AOP代理中允许混合使用基于类通知和基于实例通知。
 
 #### 6.2.2. Spring几种通知类型
 
@@ -592,7 +511,7 @@ public class DebugInterceptor implements MethodInterceptor {
     }
 }
 ```
-调用`MethodInvocation`的`proceed()`方法，沿着拦截器链向下，直到连接点。
+调用`MethodInvocation`的`proceed()`方法，沿着拦截器链向下，直到连接点（目标对象方法）。
 
 
 ##### 前置通知
@@ -740,34 +659,32 @@ ProxyFactoryBean是一个FactoryBean，通过`getObject()`方法获取目标对�
 其他`ProxyFactoryBean`特定的属性：
 - proxyInterfaces：接口名称字符串数组。如果未提供，则使用目标类的CGLIB代理（另请参见基于JDK和CGLIB的代理）。
 - interceptorNames：要使用的Advisor、拦截器或其他通知名称的字符串数组。顺序很重要，先到先得。也就是说，列表中的第一个拦截器是第一个能够拦截调用的拦截器。
-  名称是当前bean工厂中的bean名称，包括祖先工厂中的bean名称。您不能在此提及bean引用，因为这样做会导致 `ProxyFactoryBean`忽略通知的单例设置。
+  名称是当前bean工厂中的bean名称，包括父类工厂中的bean名称。您不能在此引用bean，因为这样做会导致 `ProxyFactoryBean`忽略通知的单例设置。
   您可以在拦截器名称后加上星号（*），这样做会使得名字以*号前开头的所有advisor Bean被使用。
 - singleton：无论`getObject()`调用该方法的频率如何，工厂是否应返回单个对象。默认值为true。如果要使用有状态的通知（例如，有状态的mixins），设置false来使用原型通知。
 
 #### 6.4.3. 基于JDK或者CGLIB的代理
 
-如果代理的目标对象的类没有实现任何接口，则将创建基于CGLIB的代理。即使proxyTargetClass=false，也会创建基于CGLIB的代理。
+1. 如果代理的目标对象的类没有实现任何接口，则将创建基于CGLIB的代理。即使proxyTargetClass=false，也会创建基于CGLIB的代理。
 通过设置interceptorNames指定拦截器列表。
-
-如果目标类实现你一个（或多个）接口，则创建的代理类型取决于ProxyFactoryBean的配置。
-
-如果proxyTargetClass=true，即使proxyInterfaces设置一个或多个完全限定的接口名称，也是使用CGLIB代理。
-
-如果proxyInterfaces设置一个或多个完全限定的接口名称，则创建基于JDK的代理。创建的代理实现proxyInterfaces中指定的所有接口。
-
-如果尚未设置的ProxyFactoryBean的proxyInterfaces属性，但是目标类确实实现了一个（或多个）接口，则 ProxyFactoryBean自动检测到目标类确实实现了至少一个接口，并创建了基于JDK的代理。实际代理的接口是目标类实现的所有接口。实际上，这与将目标类的所有接口的提供给该proxyInterfaces属性的效果相同。但是，它的工作量大大减少，而且不容易出现书写错误。
-
+2. 如果目标类实现你一个（或多个）接口，则创建的代理类型取决于`ProxyFactoryBean`的配置。
+3. 如果`proxyTargetClass=true`，即使`proxyInterfaces`设置一个或多个完全限定的接口名称，也是使用CGLIB代理。 
+4. 如果`proxyInterfaces`设置一个或多个完全限定的接口名称，则创建基于JDK的代理。创建的代理实现`proxyInterfaces`中指定的所有接口。
+5. 如果尚未设置的`ProxyFactoryBean`的`proxyInterfaces`属性，但是目标类确实实现了一个（或多个）接口，则`ProxyFactoryBean`自动检测到目标类确实实现了至少一个接口，并创建基于JDK的代理。实际代理的接口是目标类实现的所有接口。实际上，这与将目标类的所有接口的提供给该`proxyInterfaces`属性的效果相同。但是，它的工作量大大减少，而且不容易出现书写错误。
 
 #### 6.4.4. 代理接口
 
 
 #### 6.4.5. 代理类
 
-CGLIB代理通过在运行时生成目标类的子类来工作。Spring配置该子类来委托其调用原始对象。这个子类通过装饰着模式，编织到通知。
+CGLIB代理通过在运行时生成目标类的子类来工作。Spring委托该代理子类来调用原始对象。这个子类通过装饰者模式，将所有通知编织到代理中。
+
+- `final`方法不能被代理，因为该方法不能被子类重写；
+- 不需要手动添加CGLIB依赖，Spring3.2开始已经被打包到Spring-core中
 
 #### 6.4.6. 使用"全局的"Advisors
 
-通过星号匹配拦截器名称
+通过星号模糊匹配拦截器名称
 ```
 <bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target" ref="service"/>
@@ -831,15 +748,18 @@ CGLIB代理通过在运行时生成目标类的子类来工作。Spring配置该
 ### 6.6. 使用编码ProxyFactory方式创建AOP代理
 
 ```
+// 创建代理工厂bean
 ProxyFactory factory = new ProxyFactory(myBusinessInterfaceImpl);
+// 添加切面、Advisor
 factory.addAdvice(myMethodInterceptor);
 factory.addAdvisor(myAdvisor);
+// 获取代理对象
 MyBusinessInterface tb = (MyBusinessInterface) factory.getProxy();
 ```
 
 ### 6.7. 控制通知对象
 
-一但创建AOP代理对象，可以通过`org.springframework.aop.framework.Advised`接口控制。任何AOP代理可以转换成这个接口类型。
+创建的AOP代理对象，可以通过`org.springframework.aop.framework.Advised`接口控制。任何AOP代理可以转换成这个接口类型。
 
 ```
 Advised advised = (Advised) myObject;
@@ -847,8 +767,7 @@ Advisor[] advisors = advised.getAdvisors();
 int oldAdvisorCount = advisors.length;
 System.out.println(oldAdvisorCount + " advisors");
 
-// 添加一个通知，譬如没有切入点的拦截器
-// 将会匹配所有代理方法
+// 添加一个通知，比如没有切入点的拦截器，将会匹配所有代理方法
 // 可添加拦截器，前置、正常后置、异常后置通知
 advised.addAdvice(new DebugInterceptor());
 
@@ -860,6 +779,9 @@ assertEquals("Added two advisors", oldAdvisorCount + 2, advised.getAdvisors().le
 
 ### 6.8. 使用自动代理功能
 
+以上通过`ProxyFactoryBean`显示创建AOP代理
+
+Spring基于BeanPostProcessor的功能，可以自动生成代理。
 
 #### 6.8.1. 自动代理的Bean定义
 
@@ -882,8 +804,8 @@ assertEquals("Added two advisors", oldAdvisorCount + 2, advised.getAdvisors().le
 
 ##### DefaultAdvisorAutoProxyCreator
 
-在当前上下文中自动应用符合的advisors。不能是拦截器或通知，因为需要通过切入点评估是否有业务对象的匹配。
-没有匹配的，则该对象不会被代理。
+在上下文中自动应用符合的`advisors`实现。
+需要评估切入点是否有匹配的bean定义，没有匹配的，则该对象不会被代理。
 
 ```
 <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
@@ -903,7 +825,7 @@ assertEquals("Added two advisors", oldAdvisorCount + 2, advised.getAdvisors().le
 
 ### 6.9. 使用TargetSource实现
 
-`org.springframework.aop.TargetSource`接口负责返回实现连接点的"目标对象"。AOP代理处理一个方法调用时就会实现你一个目标实例。
+`org.springframework.aop.TargetSource`接口负责返回实现连接点的"目标对象"。AOP代理每处理一个方法调用时就会创建一个`TargetSource`。
 
 #### 6.9.1. 热插拔目标对象
 
