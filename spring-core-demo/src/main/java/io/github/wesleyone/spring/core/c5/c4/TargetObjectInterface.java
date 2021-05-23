@@ -6,4 +6,6 @@ package io.github.wesleyone.spring.core.c5.c4;
 public interface TargetObjectInterface {
 
     String say(String name);
+
+    String say(Throwable t) throws Throwable;
 }

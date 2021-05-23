@@ -13,4 +13,9 @@ public class MyTargetObjectImpl implements TargetObjectInterface {
     public String say(String name) {
         return "Hello,"+name;
     }
+
+    @Override
+    public String say(Throwable t) throws Throwable {
+        throw t;
+    }
 }
