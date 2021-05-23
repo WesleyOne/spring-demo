@@ -37,19 +37,19 @@ public class ContainerTest {
         Assert.assertEquals(name, "wesleyOne");
     }
 
-    @Test
-    public void usingContainerWithGroovyTest() {
-        // 创建和配置bean
-        ApplicationContext context = new GenericGroovyApplicationContext("1_2_2_实例化容器.groovy");
-
-        // 检索配置的实例
-        SimpleUser simpleUser = context.getBean("simpleUser", SimpleUser.class);
-
-        // 使用配置实例
-        String name = simpleUser.getName();
-
-        Assert.assertEquals(name, "wesleyOne");
-    }
+//    @Test
+//    public void usingContainerWithGroovyTest() {
+//        // 创建和配置bean
+//        ApplicationContext context = new GenericGroovyApplicationContext("1_2_2_实例化容器.groovy");
+//
+//        // 检索配置的实例
+//        SimpleUser simpleUser = context.getBean("simpleUser", SimpleUser.class);
+//
+//        // 使用配置实例
+//        String name = simpleUser.getName();
+//
+//        Assert.assertEquals(name, "wesleyOne");
+//    }
 
     @Test
     public void usingContainerWithXmlReaderTest() {
@@ -67,19 +67,19 @@ public class ContainerTest {
         Assert.assertEquals(name, "wesleyOne");
     }
 
-    @Test
-    public void usingContainerWithGroovyReaderTest() {
-        // 创建和配置bean
-        GenericApplicationContext context = new GenericApplicationContext();
-        new GroovyBeanDefinitionReader(context).loadBeanDefinitions("1_2_2_实例化容器.groovy");
-        context.refresh();
-        // 检索配置的实例
-        SimpleUser simpleUser = context.getBean("simpleUser", SimpleUser.class);
-
-        // 使用配置实例
-        String name = simpleUser.getName();
-
-        Assert.assertEquals(name, "wesleyOne");
-    }
+//    @Test
+//    public void usingContainerWithGroovyReaderTest() {
+//        // 创建和配置bean
+//        GenericApplicationContext context = new GenericApplicationContext();
+//        new GroovyBeanDefinitionReader(context).loadBeanDefinitions("1_2_2_实例化容器.groovy");
+//        context.refresh();
+//        // 检索配置的实例
+//        SimpleUser simpleUser = context.getBean("simpleUser", SimpleUser.class);
+//
+//        // 使用配置实例
+//        String name = simpleUser.getName();
+//
+//        Assert.assertEquals(name, "wesleyOne");
+//    }
 
 }
